@@ -1,16 +1,21 @@
-export default function JobCard({ job }){
-    return (
-        <div clasName="bg-gray-700 p-4 rounded shadow border-l-4 border-blue-500 hover:bg-gray600 transition">
-            <h3 className="font-bold text-white text-lg">{job.company}</h3>
-            <p className="text-sm text-gray-300">{job.position}</p>
-            <div className="mt-3 flex justify-between items-center">
-                <span className="text-xs font-mono text-green-400 bg-green-900/30 px-2 py-1 rounded">
-                    {job.salary || "N/A"}
-                </span>
-                <span className="text-[10px] text-gray-500 uppercase">
-                    ID: {job.id}
-                </span>
-            </div>
-        </div>
-    );
+export default function JobCard({ job }) {
+  return (
+    <div className="group bg-gray-900 border border-gray-700 p-4 rounded-lg shadow-sm hover:border-blue-500/50 hover:shadow-blue-500/10 transition-all cursor-pointer">
+      <div className="flex justify-between items-start mb-1">
+        <h3 className="font-bold text-gray-100 group-hover:text-blue-400 transition-colors leading-tight">
+          {job.company}
+        </h3>
+      </div>
+      <p className="text-xs text-gray-400 font-medium mb-3">{job.position}</p>
+      
+      <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-800">
+        <span className="text-[10px] font-mono text-green-500/80 bg-green-500/5 px-1.5 py-0.5 rounded">
+          {job.salary || "$ Undisclosed"}
+        </span>
+        <span className="text-[9px] text-gray-600 font-bold uppercase tracking-widest">
+          Ref: {job.id}
+        </span>
+      </div>
+    </div>
+  );
 }

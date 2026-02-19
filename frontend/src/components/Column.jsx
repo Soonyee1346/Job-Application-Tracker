@@ -1,22 +1,20 @@
-// src/components/Column.jsx
-import JobCard from './JobCard';
-
 export default function Column({ title, jobs }) {
-  return (
-    <div className="bg-gray-800/50 rounded-xl p-4 flex flex-col gap-4 min-h-[500px] border border-gray-700">
-      <div className="flex justify-between items-center mb-2 px-1">
-        <h2 className="text-sm font-black uppercase tracking-widest text-gray-400">
-          {title}
-        </h2>
-        <span className="bg-gray-700 text-gray-300 text-xs px-2 py-0.5 rounded-full">
-          {jobs.length}
-        </span>
-      </div>
+  const getHeaderColor = () => {
+    if (title === "Accepted") return "border-green-500 text-green-400";
+    if (title === "Declined") return "border-red-500 text-red-400";
+    if (title === "Offer") return "border-yellow-500 text-yellow-400";
+    return "border-blue-500 text-blue-400";
+  };
 
+  return (
+    <div className="bg-gray-800/40 border border-gray-700 rounded-xl p-3 flex flex-col min-w-[280px] h-[calc(100vh-200px)] overflow-y-auto">
+      <div className={`border-b-2 ${getHeaderColor()} pb-2 mb-4 flex justify-between items-center px-1`}>
+        <h2 className="font-black text-xs uppercase tracking-tighter">{title}</h2>
+        <span className="bg-gray-900 text-[10px] px-2 py-0.5 rounded-full text-gray-400">{jobs.length}</span>
+      </div>
+      
       <div className="flex flex-col gap-3">
-        {jobs.map((job) => (
-          <JobCard key={job.id} job={job} />
-        ))}
+        {jobs.map(job => <JobCard key={job.id} job={job} />)}
       </div>
     </div>
   );

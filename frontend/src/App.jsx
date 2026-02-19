@@ -23,22 +23,23 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 p-6 md:p-12">
-      <header className="mb-12">
-        <h1 className="text-4xl font-black tracking-tighter text-white">
-          JOB<span className="text-blue-500">FLOW</span>
-        </h1>
-        <p className="text-gray-400">Backend: FastAPI | Database: PostgreSQL</p>
+    <div className="min-h-screen bg-[#0b0e14] text-gray-100 p-6">
+      <header className="max-w-7xl mx-auto mb-10 flex justify-between items-end">
+        <div>
+          <h1 className="text-2xl font-black tracking-tighter italic">JOB_TRACKER_v1.0</h1>
+          <p className="text-gray-500 text-xs uppercase tracking-widest">System Status: <span className="text-green-500">Online</span></p>
+        </div>
+        <button className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2 px-4 rounded-md transition-all">
+          + NEW APPLICATION
+        </button>
       </header>
 
-      {/* The Kanban Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div className="flex gap-4 overflow-x-auto pb-8 snap-x">
         {STATUS_COLUMNS.map((status) => (
-          <Column 
-            key={status} 
-            title={status} 
-            // Only pass the jobs that match this specific column
-            jobs={jobs.filter(job => job.status === status)} 
+          <Column
+            key={status}
+            title={status}
+            jobs={jobs.filter(job => job.status === status)}
           />
         ))}
       </div>
