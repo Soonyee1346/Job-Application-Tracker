@@ -2,3 +2,5 @@
 /backend/venv
 
 /backend/.env
+/backend/migrations/versions/__pycache__
+/backend/migrations/__pycache__

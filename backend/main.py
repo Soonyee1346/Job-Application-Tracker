@@ -14,6 +14,11 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+origins = [
+    "http://localhost:3000",
+    "http://localhost:5173"
+]
+
 @app.post("/jobs", response_model=schemas.Job)
 def create_job(job_data: schemas.JobCreate, db: Session = Depends(get_db)):
     new_job = models.JobApplication(
@@ -32,10 +37,23 @@ def create_job(job_data: schemas.JobCreate, db: Session = Depends(get_db)):
 def read_jobs(db: Session = Depends(get_db)):
     return db.query(models.JobApplication).all()
 
-origins = [
-    "http://localhost:3000",
-    "http://localhost:5173"
-]
+@app.patch("/jobs/{job_id}", response_model=schemas.Job)
+def update_job(job_id: int, job_update: schemas.JobUpdate, db: Session):
+    db_job = db.query(models.JobApplication).filter(models.JobApplication.id == job_id).first()
+
+    if db_job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    update_data = job_update.model_dump(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(db_job, key, value)
+
+    db.add(db_job)
+    db.commit()
+    db.refresh(db_job)
+
+    return db_job
 
 @app.get('/')
 def read_root():
