@@ -1,10 +1,15 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import get_db
 import models, schemas
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+    "http://localhost:5173"
+]
 
 app.add_middleware(
     CORSMiddleware,
@@ -13,11 +18,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-
-origins = [
-    "http://localhost:3000",
-    "http://localhost:5173"
-]
 
 @app.post("/jobs", response_model=schemas.Job)
 def create_job(job_data: schemas.JobCreate, db: Session = Depends(get_db)):
@@ -38,7 +38,7 @@ def read_jobs(db: Session = Depends(get_db)):
     return db.query(models.JobApplication).all()
 
 @app.patch("/jobs/{job_id}", response_model=schemas.Job)
-def update_job(job_id: int, job_update: schemas.JobUpdate, db: Session):
+def update_job(job_id: int, job_update: schemas.JobUpdate, db: Session = Depends(get_db)):
     db_job = db.query(models.JobApplication).filter(models.JobApplication.id == job_id).first()
 
     if db_job is None:
