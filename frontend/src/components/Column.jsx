@@ -1,3 +1,6 @@
+import React from "react";
+import JobCard from "./JobCard";
+
 export default function Column({ title, jobs }) {
   const getHeaderColor = () => {
     if (title === "Accepted") return "border-green-500 text-green-400";
