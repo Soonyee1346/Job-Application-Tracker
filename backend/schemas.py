@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 from models import JobStatus
 from typing import Optional
-import datetime
+from datetime import datetime
 
 class JobBase(BaseModel):
     company: str
