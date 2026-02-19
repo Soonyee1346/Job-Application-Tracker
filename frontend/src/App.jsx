@@ -22,6 +22,23 @@ function App() {
       .catch(err => console.error("Could not connect to Backend:", err));
   }, []);
 
+  const addJob = async (jobData) => {
+    try {
+      const response = await fetch("http://localhost:8000/jobs", {
+        method: "POST",
+        headers: { "Content-Type": "application.json"},
+        body: JSON.stringify(jobData)
+      });
+
+      if (response.ok) {
+        const newJob = await response.json();
+        setJobs((prevJobs) => [ ...prevJobs, newJob]);
+      }
+    } catch (err) {
+      console.error("Backend unreachable", err)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#0b0e14] text-gray-100 p-6">
       <header className="max-w-7xl mx-auto mb-10 flex justify-between items-end">
