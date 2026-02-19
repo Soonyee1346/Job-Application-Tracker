@@ -9,6 +9,7 @@ class JobStatus(enum.Enum):
     INTERVIEWING = "Interviewing"
     OFFER = "Offer"
     REJECTED = "Rejected"
+    ACCEPTED = "Accepted"
     DECLINED = "Declined"
 
 class JobApplication(Base):
