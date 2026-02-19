@@ -1,39 +1,39 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState, useEffect } from "react";
+import Column from "./components/Column";
+
+const STATUS_COLUMNS = [
+  "Wishlist",
+  "Applied",
+  "Interviewing",
+  "Offer",
+  "Rejected",
+  "Declined"
+]
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/")
-      .then(response => response.json())
-      .then(data => setMessage(data.message))
-      .catch(error => console.error('Error fetching data:', error))
-  }, [])
+    fetch("http://localhost:8000/jobs")
+      .then(res => res.json())
+      .then(data => setJobs(data))
+      .catch(err => console.error("API Error:", err));
+  }, []);
 
   return (
-
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-
-      <div className="p-8 bg-white shadow-lg rounded-lg">
-
-        <h1 className="text-2xl font-bold text-blue-600 mb-4">
-
-          Job Application Tracker
-
-        </h1>
-
-        <p className="text-gray-700">
-
-          Backend Status: <span className="font-semibold">{message || 'Loading...'}</span>
-
-        </p>
-
+    <div className="min-h-screen bg-gray-900 text-white p-8">
+      <h1 className="text-3xl font-black mb-8">JOB TRACKER</h1>
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        {STATUS_COLUMNS.map(status => (
+          <Column
+            key={status}
+            title={status}
+            jobs={jobs.filter(j => j.status === status)}
+          />
+        ))}
       </div>
-
     </div>
-
   )
 }
 
-export default App
+export default App;
