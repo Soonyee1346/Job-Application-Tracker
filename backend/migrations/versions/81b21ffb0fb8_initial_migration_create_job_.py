@@ -25,7 +25,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('company', sa.String(), nullable=False),
     sa.Column('position', sa.String(), nullable=False),
-    sa.Column('status', sa.Enum('WISHLIST', 'APPLIED', 'INTERVIEWING', 'OFFER', 'REJECTED', 'DECLINED', name='jobstatus'), nullable=True),
+    sa.Column('status', sa.Enum('WISHLIST', 'APPLIED', 'INTERVIEWING', 'OFFER', 'REJECTED', 'ACCEPTED','DECLINED', name='jobstatus'), nullable=True),
     sa.Column('salary', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.PrimaryKeyConstraint('id')

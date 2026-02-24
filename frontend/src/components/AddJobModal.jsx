@@ -38,7 +38,7 @@ export default function AddJobModal({ isOpen, onClose, onAdd }) {
                         className="w-full bg-gray-900 border border-gray-700 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-100"
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                     >
-                        {["Wishlist", "Applied", "Interviewing", "Offer", "Accepted", "Declined"].map(s => (
+                        {["Wishlist", "Applied", "Interviewing", "Offer", "Rejected", "Accepted", "Declined"].map(s => (
                             <option key={s} value={s}>{s}</option>
                         ))}
                     </select>

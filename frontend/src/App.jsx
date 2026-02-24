@@ -25,9 +25,10 @@ function App() {
 
   const handleAddJob = async (jobData) => {
     try {
+      console.log("Adding job:", jobData);
       const response = await fetch("http://localhost:8000/jobs", {
         method: "POST",
-        headers: { "Content-Type": "application.json"},
+        headers: { "Content-Type": "application/json"},
         body: JSON.stringify(jobData)
       });
 
