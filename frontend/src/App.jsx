@@ -94,15 +94,15 @@ function App() {
             <Column key={status} id={status} title={status} jobs={jobs.filter(j => j.status === status)} />
           ))}
         </div>
+        
+        <DragOverlay dropAnimation={null}>
+          {activeId ? (
+            <div className="w-[280px]">
+              <JobCard job={jobs.find(j => j.id === activeId)} />
+            </div>
+          ) : null}
+        </DragOverlay>
       </DndContext>
-
-      <DragOverlay dropAnimation={null}>
-        {activeId ? (
-          <div className="w-[280px]">
-            <JobCard job={jobs.find(j => j.id === activeId)} />
-          </div>
-        ) : null}
-      </DragOverlay>
 
       <AddJobModal
         isOpen={isModalOpen}
