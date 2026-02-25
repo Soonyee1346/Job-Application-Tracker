@@ -2,10 +2,15 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
 export default function JobCard({ job }) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({ id: job.id });
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: job.id });
+
+  const actuallyDragging = isDragging || !!transform;
 
   const style = transform ? {
-    transform: CSS.Transform.toString(transform)
+    transform: CSS.Transform.toString(transform),
+    width: actuallyDragging ? "280px" : undefined,
+    zIndex: actuallyDragging ? 50 : undefined,
+    opacity: actuallyDragging ? 0.8 : 1,
   } : undefined;
 
   return (

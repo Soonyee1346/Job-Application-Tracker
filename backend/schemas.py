@@ -13,10 +13,10 @@ class JobCreate(JobBase):
     pass
 
 class JobUpdate(BaseModel):
-    company: Optional[str]
-    position: Optional[str]
-    status: Optional[JobStatus]
-    salary: Optional[str]
+    company: Optional[str] = None
+    position: Optional[str] = None
+    status: Optional[JobStatus] = None
+    salary: Optional[str] = None
 
 class Job(JobBase):
     id: int

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { DndContext, closestCorners } from "@dnd-kit/core"
+import { DndContext, closestCorners, DragOverlay } from "@dnd-kit/core"
 import Column from "./components/Column";
 import AddJobModal from "./components/AddJobModal";
+import JobCard from "./components/JobCard";
 
 const STATUS_COLUMNS = [
   "Wishlist",
@@ -51,13 +52,12 @@ function App() {
     const { active, over } = event;
     if (!over) return;
 
-    setActiveId(null);
-
     const jobId = active.id;
     const newStatus = over.id;
 
-    const job = jobs.find(j => j.id === jobId);
-    if (!job || job.status === newStatus) return;
+    setActiveId(null);
+
+    setJobs((prevJobs) => prevJobs.map(job => job.id === jobId ? { ...job, status: newStatus } : job));
 
     try {
       const response = await fetch(`http://localhost:8000/jobs/${jobId}`, {
@@ -68,9 +68,11 @@ function App() {
 
       if (!response.ok) throw new Error("Failed to update job status");
     } catch (err) {
-      setJobs(jobs);
-
-      console.error("Error updating job status:", err);
+      fetch("http://localhost:8000/jobs")
+        .then(res => res.json())
+        .then(data => setJobs(data))
+        .catch(err => console.error("Could not connect to Backend:", err));
+      console.error("Backend unreachable", err)
     }
   }
 
@@ -89,10 +91,18 @@ function App() {
       <DndContext collisionDetection={closestCorners} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div className="flex gap-4 overflow-x-auto pb-8 snap-x">
           {STATUS_COLUMNS.map((status) => (
-            <Column key={status} title={status} jobs={jobs.filter(j => j.status === status)} />
+            <Column key={status} id={status} title={status} jobs={jobs.filter(j => j.status === status)} />
           ))}
         </div>
       </DndContext>
+
+      <DragOverlay dropAnimation={null}>
+        {activeId ? (
+          <div className="w-[280px]">
+            <JobCard job={jobs.find(j => j.id === activeId)} />
+          </div>
+        ) : null}
+      </DragOverlay>
 
       <AddJobModal
         isOpen={isModalOpen}
