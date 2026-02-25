@@ -1,6 +1,19 @@
-export default function JobCard({ job }) {
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
+
+export default function JobCard({ job, isOverlay = false }) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: job.id, disabled: isOverlay });
+
+  const style = !isOverlay ? {
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0 : 1,
+  } : {
+    cursor: "grabbing"
+  };
+
   return (
-    <div className="group bg-gray-900 border border-gray-700 p-4 rounded-lg shadow-sm hover:border-blue-500/50 hover:shadow-blue-500/10 transition-all cursor-pointer">
+    <div ref={setNodeRef} style={style} {...listeners} {...attributes} className={`group bg-gray-900 border border-gray-700 p-4 rounded-lg shadow-sm w-full ${isOverlay ? 'border-blue-500 shadow-2xl rotate-3' : 'hover:border-blue-500/50'}`}
+    >
       <div className="flex justify-between items-start mb-1">
         <h3 className="font-bold text-gray-100 group-hover:text-blue-400 transition-colors leading-tight">
           {job.company}
