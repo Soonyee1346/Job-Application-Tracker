@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { DndContext, closestCorners } from "@dnd-kit/core"
 import Column from "./components/Column";
 import AddJobModal from "./components/AddJobModal";
 
@@ -39,6 +40,15 @@ function App() {
     } catch (err) {
       console.error("Backend unreachable", err)
     }
+  }
+
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    const jobId = active.id;
+    const newStatus = over.id;
+    
   }
 
   return (
