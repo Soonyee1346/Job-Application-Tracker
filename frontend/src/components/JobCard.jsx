@@ -1,6 +1,15 @@
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
+
 export default function JobCard({ job }) {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({ id: job.id });
+
+  const style = transform ? {
+    transform: CSS.Transform.toString(transform)
+  } : undefined;
+
   return (
-    <div className="group bg-gray-900 border border-gray-700 p-4 rounded-lg shadow-sm hover:border-blue-500/50 hover:shadow-blue-500/10 transition-all cursor-pointer">
+    <div ref={setNodeRef} style={style} {...listeners} {...attributes} className="group bg-gray-900 border border-gray-700 p-4 rounded-lg shadow-sm hover:border-blue-500/50 hover:shadow-blue-500/10 transition-all cursor-pointer">
       <div className="flex justify-between items-start mb-1">
         <h3 className="font-bold text-gray-100 group-hover:text-blue-400 transition-colors leading-tight">
           {job.company}
