@@ -11,9 +11,9 @@ export default function AddJobModal({ isOpen, onClose, onAdd, initialData }) {
     useEffect(() => {
         if (initialData) {
             setFormData({
-                company: initialData.company,
-                position: initialData.position,
-                status: initialData.status,
+                company: initialData.company || '',
+                position: initialData.position || '',
+                status: initialData.status || 'Wishlist',
                 salary: initialData.salary || ''
             });
         } else {
@@ -32,8 +32,9 @@ export default function AddJobModal({ isOpen, onClose, onAdd, initialData }) {
     return (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <form onSubmit={handleSubmit} className="bg-gray-800 border border-gray-700 p-8 rounded-2xl w-full max-w-md shadow-2xl">
-                <h2 className="text-2xl font-black mb-6 text-white tracking-tight">{initialData ? "UPDATE JOB" : "ADD NEW JOB"}</h2>
-
+                <h2 className="text-2xl font-black mb-6 text-white tracking-tight">
+                    {initialData ? "EDIT JOB" : "ADD NEW JOB"}
+                </h2>
                 <div className="space-y-4">
                     <input
                         className="w-full bg-gray-900 border border-gray-700 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-100"

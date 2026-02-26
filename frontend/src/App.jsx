@@ -98,17 +98,17 @@ function App() {
     setIsModalOpen(true);
   }
 
-  const handleUpdateJob = async (jobId, updatedData) => {
+  const handleUpdateJob = async (updatedData) => {
     try {
-      const response = await fetch(`http://localhost:8000/jobs/${jobId}`, {
+      const response = await fetch(`http://localhost:8000/jobs/${editingJob.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ updatedData })
+        body: JSON.stringify(updatedData )
       })
 
       if (response.ok) {
         const updatedJob = await response.json();
-        setJobs((prevJobs) => prevJobs.map(job => job.id === jobId ? updatedJob : j));
+        setJobs((prevJobs) => prevJobs.map(job => job.id === editingJob.id ? updatedJob : job));
         setEditingJob(null);
       }
     } catch (err) {
@@ -137,21 +137,19 @@ function App() {
         
         <DragOverlay dropAnimation={null}>
           {activeId ? (
-            <div className="w-[280px]">
-              <JobCard job={jobs.find(j => j.id === activeId)} />
-            </div>
+            <JobCard job={jobs.find(j => j.id === activeId)} />
           ) : null}
         </DragOverlay>
       </DndContext>
 
       <AddJobModal
-        isOpen={isModalOpen || !!editingJob}
+        isOpen={isModalOpen}
+        initialData={editingJob}
         onClose={() => { 
           setIsModalOpen(false);
           setEditingJob(null);
         }}
         onAdd={editingJob ? handleUpdateJob : handleAddJob}
-        initalData={editingJob}
       />
     </div>
   );

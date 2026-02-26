@@ -38,8 +38,7 @@ export default function JobCard({ job, isOverlay = false, onDelete, onEdit }) {
         <span className="text-[9px] text-gray-600 bg-blue-500/5  px-1.5 py-0.5 rounded font-bold uppercase tracking-widest">
           {!isOverlay && (
             <button onPointerDown={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
+              onClick={() => {
                 onEdit(job);
               }}
               >
