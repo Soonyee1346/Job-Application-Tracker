@@ -1,7 +1,7 @@
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
-export default function JobCard({ job, isOverlay = false, onDelete, onUpdate }) {
+export default function JobCard({ job, isOverlay = false, onDelete, onEdit }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: job.id, disabled: isOverlay });
 
   const style = !isOverlay ? {
@@ -40,10 +40,12 @@ export default function JobCard({ job, isOverlay = false, onDelete, onUpdate }) 
             <button onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.stopPropagation();
-                onUpdate(job.id);
+                onEdit(job);
               }}
-              className="text-gray-500 hover:text-yellow-500 transition-colors px-2">
-              Update
+              >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
             </button>
           )}
         </span>

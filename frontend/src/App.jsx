@@ -18,6 +18,7 @@ function App() {
   const [jobs, setJobs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeId, setActiveId] = useState(null);
+  const [editingJob, setEditingJob] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:8000/jobs")
@@ -92,6 +93,29 @@ function App() {
     }
   }
 
+  const handleEditClick = (job) => {
+    setEditingJob(job);
+    setIsModalOpen(true);
+  }
+
+  const handleUpdateJob = async (jobId, updatedData) => {
+    try {
+      const response = await fetch(`http://localhost:8000/jobs/${jobId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ updatedData })
+      })
+
+      if (response.ok) {
+        const updatedJob = await response.json();
+        setJobs((prevJobs) => prevJobs.map(job => job.id === jobId ? updatedJob : j));
+        setEditingJob(null);
+      }
+    } catch (err) {
+      console.error("Failed to updated job: ", err);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#0b0e14] text-gray-100 p-6">
       <header className="max-w-7xl mx-auto mb-10 flex justify-between items-end">
@@ -107,7 +131,7 @@ function App() {
       <DndContext collisionDetection={closestCorners} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div className="flex gap-4 overflow-x-auto pb-8 snap-x">
           {STATUS_COLUMNS.map((status) => (
-            <Column key={status} id={status} title={status} jobs={jobs.filter(j => j.status === status)} onDelete={handleDeleteJob} />
+            <Column key={status} id={status} title={status} jobs={jobs.filter(j => j.status === status)} onDelete={handleDeleteJob} onEdit={handleEditClick} />
           ))}
         </div>
         
@@ -121,9 +145,13 @@ function App() {
       </DndContext>
 
       <AddJobModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onAdd={handleAddJob}
+        isOpen={isModalOpen || !!editingJob}
+        onClose={() => { 
+          setIsModalOpen(false);
+          setEditingJob(null);
+        }}
+        onAdd={editingJob ? handleUpdateJob : handleAddJob}
+        initalData={editingJob}
       />
     </div>
   );
