@@ -1,7 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import JobCard from "./JobCard";
 
-export default function Column({ id, title, jobs }) {
+export default function Column({ id, title, jobs, onDelete }) {
 
   const { setNodeRef } = useDroppable({ id });
 
@@ -20,7 +20,7 @@ export default function Column({ id, title, jobs }) {
         <span className="bg-gray-900 text-[10px] px-2 py-0.5 rounded-full text-gray-400">{jobs.length}</span>
       </div>
       <div className="flex flex-col gap-3">
-        {jobs.map(job => <JobCard key={job.id} job={job} />)}
+        {jobs.map(job => <JobCard key={job.id} job={job} onDelete={onDelete}/>)}
       </div>
     </div>
   );

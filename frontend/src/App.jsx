@@ -76,6 +76,22 @@ function App() {
     }
   }
 
+  const handleDeleteJob = async (jobId) => {
+    try {
+      const response = await fetch(`http://localhost:8000/jobs/${jobId}`, {
+        method: "DELETE"
+      });
+
+      if (response.ok) {
+        setJobs((prevJobs) => prevJobs.filter((job) => job.id !== jobId));
+      } else {
+        console.error("Failed to delete job");
+      }
+    } catch (e) {
+      console.error("Error connecting to backend:", err)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#0b0e14] text-gray-100 p-6">
       <header className="max-w-7xl mx-auto mb-10 flex justify-between items-end">
@@ -91,7 +107,7 @@ function App() {
       <DndContext collisionDetection={closestCorners} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div className="flex gap-4 overflow-x-auto pb-8 snap-x">
           {STATUS_COLUMNS.map((status) => (
-            <Column key={status} id={status} title={status} jobs={jobs.filter(j => j.status === status)} />
+            <Column key={status} id={status} title={status} jobs={jobs.filter(j => j.status === status)} onDelete={handleDeleteJob} />
           ))}
         </div>
         

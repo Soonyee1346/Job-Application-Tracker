@@ -57,6 +57,18 @@ def update_job(job_id: int, job_update: schemas.JobUpdate, db: Session = Depends
 
     return db_job
 
+@app.delete('/jobs/{job_id}')
+def delete_job(job_id: int, db: Session = Depends(get_db)):
+    db_job = db.query(models.JobApplication).filter(models.JobApplication.id == job_id).first()
+
+    if db_job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    db.delete(db_job)
+    db.commit()
+
+    return {"message": "Job deleted successfully"}
+
 @app.get('/')
 def read_root():
     return {"message": "Job Application Tracker API is running!"}
