@@ -8,3 +8,5 @@ terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
 /terraform/.terraform
 terraform/.terraform.lock.hcl
+frontend/.env
+terraform/.terraform.tfstate.lock.info

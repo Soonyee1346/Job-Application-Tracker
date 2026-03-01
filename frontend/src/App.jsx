@@ -21,7 +21,7 @@ function App() {
   const [editingJob, setEditingJob] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/jobs")
+    fetch(`${import.meta.env.VITE_API_URL}/jobs`)
       .then(res => res.json())
       .then(data => setJobs(data))
       .catch(err => console.error("Could not connect to Backend:", err));
@@ -30,7 +30,7 @@ function App() {
   const handleAddJob = async (jobData) => {
     try {
       console.log("Adding job:", jobData);
-      const response = await fetch("http://localhost:8000/jobs", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(jobData)
@@ -61,7 +61,7 @@ function App() {
     setJobs((prevJobs) => prevJobs.map(job => job.id === jobId ? { ...job, status: newStatus } : job));
 
     try {
-      const response = await fetch(`http://localhost:8000/jobs/${jobId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs/${jobId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus })
@@ -69,7 +69,7 @@ function App() {
 
       if (!response.ok) throw new Error("Failed to update job status");
     } catch (err) {
-      fetch("http://localhost:8000/jobs")
+      fetch(`${import.meta.env.VITE_API_URL}/jobs`)
         .then(res => res.json())
         .then(data => setJobs(data))
         .catch(err => console.error("Could not connect to Backend:", err));
@@ -79,7 +79,7 @@ function App() {
 
   const handleDeleteJob = async (jobId) => {
     try {
-      const response = await fetch(`http://localhost:8000/jobs/${jobId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs/${jobId}`, {
         method: "DELETE"
       });
 
@@ -100,7 +100,7 @@ function App() {
 
   const handleUpdateJob = async (updatedData) => {
     try {
-      const response = await fetch(`http://localhost:8000/jobs/${editingJob.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs/${editingJob.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData )
