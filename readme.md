@@ -58,7 +58,8 @@ Frontend: Navigate to /frontend, install dependencies, and start Vite.
 Bash
 npm install
 npm run dev
-☁️ AWS Deployment Guide (Terraform)
+
+☁️ AWS Deployment Guide (Terraform branch)
 This project uses Terraform to provision a VPC, Public/Private subnets, Security Groups, an RDS Postgres instance, and an ECS Fargate cluster.
 
 1. Provision ECR Repositories
