@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "backend" {
             environment  = [
                 {
                     name = "DATABASE_URL"
-                    value = "postgresql://postgres:jobtracker@{aws_db_instance.postgres.endopoint}/job_tracker
+                    value = "postgresql://postgres:jobtracker@${aws_db_instance.postgres.endpoint}/job_tracker
                 }
             ]
         }
