@@ -21,17 +21,41 @@ resource "aws_security_group" "backend_sg" {
     }
 }
 
+resource "aws_iam_role" "ecs_execution_role" {
+    name = "${var.project_name}-ecs-execution-role"
+
+    assume_role_policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [
+            {
+                Action = "sts:AssumeRole"
+                Effect = "Allow"
+                Principal = {
+                    Service = "ecs-tasks.amazonaws.com"
+                }
+            }
+        ]
+    })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
+    role        = aws_iam_role.ecs_execution_role.name
+    policy_arn  = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
 resource "aws_ecs_task_definition" "backend" {
     family                   = "backend"
     network_mode             = "awsvpc"
-    requires_compatabilities = ["FARGATE"]
+    requires_compatibilities = ["FARGATE"]
     cpu                      = "256"
     memory                   = "512"
+
+    execution_role_arn       = aws_iam_role.ecs_execution_role.arn
 
     container_definitions = jsonencode([
         {
             name         = "backend"
-            image        = "YOUR_AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-2.amazonaws.com/job-tracker-backend:latest"
+            image        = "${aws_ecr_repository.backend.repository_url}:url"
             essential    = true
             portMappings = [
                 {
@@ -42,7 +66,7 @@ resource "aws_ecs_task_definition" "backend" {
             environment  = [
                 {
                     name = "DATABASE_URL"
-                    value = "postgresql://postgres:jobtracker@${aws_db_instance.postgres.endpoint}/job_tracker
+                    value = "postgresql://postgres:jobtracker@${aws_db_instance.postgres.endpoint}/job_tracker"
                 }
             ]
         }
@@ -90,7 +114,7 @@ resource "aws_db_instance" "postgres" {
     storage_type           = "gp2"
     instance_class         = "db.t3.micro"
     engine                 = "postgres"
-    engine_version         = "15.4"
+    engine_version         = "18.2"
     db_name                = "job_tracker"
     username               = "postgres"
     password               = "jobtracker" # Use a secrets manager in prod

@@ -4,3 +4,7 @@
 /backend/.env
 /backend/migrations/versions/__pycache__
 /backend/migrations/__pycache__
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+/terraform/.terraform
+terraform/.terraform.lock.hcl
