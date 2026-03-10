@@ -20,8 +20,10 @@ function App() {
   const [activeId, setActiveId] = useState(null);
   const [editingJob, setEditingJob] = useState(null);
 
+  const API_URL = window.location.hostname === "localhost" ? "http://localhost:8000" : `http://${window.location.hostname}:8000`;
+
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/jobs`)
+    fetch(`${API_URL}/jobs`)
       .then(res => res.json())
       .then(data => setJobs(data))
       .catch(err => console.error("Could not connect to Backend:", err));
@@ -30,7 +32,7 @@ function App() {
   const handleAddJob = async (jobData) => {
     try {
       console.log("Adding job:", jobData);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs`, {
+      const response = await fetch(`${API_URL}/jobs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(jobData)
@@ -61,7 +63,7 @@ function App() {
     setJobs((prevJobs) => prevJobs.map(job => job.id === jobId ? { ...job, status: newStatus } : job));
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs/${jobId}`, {
+      const response = await fetch(`${API_URL}/jobs/${jobId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus })
@@ -79,7 +81,7 @@ function App() {
 
   const handleDeleteJob = async (jobId) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs/${jobId}`, {
+      const response = await fetch(`${API_URL}/jobs/${jobId}`, {
         method: "DELETE"
       });
 
@@ -100,7 +102,7 @@ function App() {
 
   const handleUpdateJob = async (updatedData) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs/${editingJob.id}`, {
+      const response = await fetch(`${API_URL}/jobs/${editingJob.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData )
