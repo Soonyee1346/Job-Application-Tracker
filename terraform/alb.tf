@@ -1,5 +1,5 @@
 resource "aws_security_group" "alb_sg" {
-    name        = "${var.project.name}-alb_sg"
+    name        = "${var.project_name}-alb_sg"
     description = "Allow HTTP traffic to ALB"
     vpc_id      = aws_vpc.main.id
 
@@ -41,7 +41,7 @@ resource "aws_lb_target_group" "backend" {
     target_type = "ip"
 
     health_check {
-        path                = "/health/
+        path                = "/health/"
         interval            = 30
         timeout             = 5
         healthy_threshold   = 2
@@ -68,7 +68,7 @@ resource "aws_lb_listener" "frontend_listener" {
     }
 }
 
-resource "aws_lb_listener" "frontend_listener" {
+resource "aws_lb_listener" "backend_listener" {
     load_balancer_arn = aws_lb.main.arn
     port              = 8000
     protocol          = "HTTP"
