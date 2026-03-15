@@ -1,0 +1,57 @@
+name: Deploy to AWS ECS
+
+on:
+  push:
+    branches:
+      - terraform
+
+env:
+  AWS_REGION: ap-southeast-2
+  ECR_BACKEND: job-tracker-backend
+  ECR_FRONTEND: job-tracker-frontend
+  ECS_CLUSTER: job-tracker-cluster
+  ECS_SERVICE_BACKEND: backend-service
+  ECS_SERVICE_FRONTEND: frontend-service
+
+jobs:
+  build-and-deploy:
+    name: Build, Push, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Backend Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs-registry }}
+        run: |
+          cd backend
+          docker build -t $ECR_REGISTRY/$ECR_BACKEND:latest .
+          docker push $ECR_REGISTRY/$ECRBACKEND:latest
+      
+      - name: Build and Push Frontend Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs-registry }}
+        run: |
+          cd frontend
+          docker build -t $ECR_REGISTRY/$ECR_FRONTEND:latest .
+          docker push $ECR_REGISTRY/$ECR_FRONTEND:latest
+
+      - name: Force New ECS Deployments
+        run: |
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE_BACKEND }} --force-new-deployment > /dev/null
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE_FRONTEND }} --force-new-deployment > /dev/null
+
+      
