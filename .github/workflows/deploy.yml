@@ -35,7 +35,7 @@ jobs:
 
       - name: Build and Push Backend Image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs-registry }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           cd backend
           docker build -t $ECR_REGISTRY/$ECR_BACKEND:latest .
@@ -43,7 +43,7 @@ jobs:
       
       - name: Build and Push Frontend Image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs-registry }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.egistry }}
         run: |
           cd frontend
           docker build -t $ECR_REGISTRY/$ECR_FRONTEND:latest .
