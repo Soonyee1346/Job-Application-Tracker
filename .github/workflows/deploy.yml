@@ -36,14 +36,14 @@ jobs:
       - name: Build and Push Backend Image
         run: |
           cd backend
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ ECR_BACKEND }}:latest .
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ ECR_BACKEND }}:latest
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_BACKEND }}:latest .
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_BACKEND }}:latest
       
       - name: Build and Push Frontend Image
         run: |
           cd frontend
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ ECR_FRONTEND }}:latest
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ ECR_FRONTEND }}:latest
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_FRONTEND }}:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_FRONTEND }}:latest
 
       - name: Force New ECS Deployments
         run: |
