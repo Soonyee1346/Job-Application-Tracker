@@ -42,7 +42,7 @@ jobs:
       - name: Build and Push Frontend Image
         run: |
           cd frontend
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_FRONTEND }}:latest
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_FRONTEND }}:latest .
           docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_FRONTEND }}:latest
 
       - name: Force New ECS Deployments
