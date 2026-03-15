@@ -66,6 +66,6 @@ def delete_job(job_id: int, db: Session = Depends(get_db)):
 def read_root():
     return {"message": "Job Application Tracker API is running!"}
 
-@app.get('/health')
+@app.get('/health/')
 def health_check():
     return {"status": "ok"}
